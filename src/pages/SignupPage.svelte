@@ -3,6 +3,7 @@
 <script>
   import SignupForm from "../components/SignupForm.svelte";
   import { userStore } from "../stores/userStore.js";
+  import { setToken } from "../stores/queries/tokenStoreQueries.js";
   import { push } from "svelte-spa-router";
 
   import { INTF_AUTH_ENDPOINT } from "../config";
@@ -25,11 +26,12 @@
 
       result = { success: session.is_active };
       if (session.is_active) {
+        setToken(session.token);
         userStore.set({
           isAuthenticated: true,
           username: payload.username,
         });
-        setTimeout(() => push("/success"), 1500);
+        setTimeout(() => push("/vault"), 1500);
       }
     } catch (error) {
       console.error("Error during signup:", error);
