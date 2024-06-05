@@ -7,15 +7,14 @@
 </script>
 
 <div class="section">
-  <div class="fixed-grid has-4-cols">
+  <div class="fixed-grid has-5-cols">
     <div class="grid">
-      <div class="cellis-col-span-2">
+      <div class="cell"></div>
+      <div class="cell is-col-span-3">
         {#each passwords as password (password.id)}
           <PasswordItem {password} {onEdit} {onDelete} />
         {/each}
       </div>
-      <div class="cell"></div>
-      <div class="cell"></div>
       <div class="cell"></div>
     </div>
   </div>

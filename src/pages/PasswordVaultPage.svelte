@@ -1,17 +1,34 @@
 <script>
-  import PasswordsTab from "../components/PasswordsTab.svelte";
-  import { onMount } from "svelte";
-  import { getPasswords } from "../stores/queries/passwordStoreQueries";
+  import PasswordVaultTabs from "../components/PasswordVaultTabs.svelte";
+  import { onMount, onDestroy } from "svelte";
+  import { getPasswords as updatePasswordStore } from "../stores/queries/passwordStoreQueries";
+  import { storePasswords } from "../stores/mutations/passwordStoreMutations";
+  import { passwordStore as passwordsStore } from "../stores/PasswordStore";
 
   let passwords = [];
+  let isSaved;
+  let result;
+
+  let unsubscribe;
 
   onMount(async () => {
     try {
-      passwords = await getPasswords();
-      console.log(passwords);
+      const isPasswordStoreSet = await updatePasswordStore();
+      console.log(isPasswordStoreSet);
+      if (isPasswordStoreSet) {
+        unsubscribe = passwordsStore.subscribe((value) => {
+          passwords = value;
+        });
+      } else {
+        throw new Error("Password store not set");
+      }
     } catch (error) {
       console.error(error);
     }
+  });
+
+  onDestroy(() => {
+    if (unsubscribe) unsubscribe();
   });
 
   async function onEdit() {
@@ -25,10 +42,19 @@
     // await delete_password(passwordId);
     // Optionally re-fetch or filter out the deleted password locally
   }
+
+  async function addPasswords(event) {
+    const savedPasswords = event.detail;
+    isSaved = await storePasswords(savedPasswords);
+    result = { success: isSaved };
+    console.log("Inside PasswordVaultPage", isSaved);
+  }
 </script>
 
-{#if passwords.length > 0}
+<PasswordVaultTabs {passwords} {onEdit} {onDelete} {addPasswords} {result} />
+
+<!-- {#if passwords.length > 0}
   <PasswordsTab {passwords} {onEdit} {onDelete} />
 {:else}
-  <p>Loading...</p>
-{/if}
+  <AddPasswordsTab on:save={addPasswords} bind:result />
+{/if} -->
