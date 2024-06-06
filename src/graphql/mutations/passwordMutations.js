@@ -25,3 +25,26 @@ export async function storePasswordsInBackend(newPasswords) {
     console.log(error);
   }
 }
+
+const UPDATE_PASSWORDS_MUTATION = gql`
+  mutation UpdatePasswords($passwords: [PasswordUpdateInput!]!) {
+    updatePasswords(passwords: $passwords) {
+      id
+      passwordName
+      encryptedPassword
+    }
+  }
+`;
+
+export async function updatePasswordsInBackend(modifiedPasswords) {
+  try {
+    const client = await getGraphQLClient();
+    const response = await client.request(UPDATE_PASSWORDS_MUTATION, {
+      passwords: modifiedPasswords,
+    });
+    const result = response.updatePasswords;
+    return result;
+  } catch (error) {
+    console.log(error);
+  }
+}

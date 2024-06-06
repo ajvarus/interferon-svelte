@@ -1,9 +1,15 @@
 // /src/stores/mutations/passwordStoreMutations.js
 
-import { storePasswordsInBackend } from "../../graphql/mutations/passwordMutations";
-import { updatePasswords } from "../PasswordStore";
+import {
+  storePasswordsInBackend,
+  updatePasswordsInBackend,
+} from "../../graphql/mutations/passwordMutations";
+import { updatePasswordsInStore, OpType } from "../PasswordStore";
 
-import transformPasswordsForStorage from "../../tools/passwordTransformer";
+import {
+  transformPasswordsForStorage,
+  transformPasswordsForUpdate,
+} from "../../tools/passwordTransformer";
 
 export async function storePasswords(newPasswords) {
   let isStored = false;
@@ -12,7 +18,17 @@ export async function storePasswords(newPasswords) {
   if (newPasswords.length !== 0) {
     transformedPasswords = transformPasswordsForStorage(newPasswords);
     storedPasswords = await storePasswordsInBackend(transformedPasswords);
-    isStored = updatePasswords(storedPasswords);
+    isStored = updatePasswordsInStore(storedPasswords, OpType.ADD);
   }
   return isStored;
+}
+
+export async function updatePasswords(passwords) {
+  let isUpdated = false;
+  if (passwords) {
+    let transformedPasswords = transformPasswordsForUpdate(passwords);
+    let updatedPasswords = await updatePasswordsInBackend(transformedPasswords);
+    isUpdated = updatePasswordsInStore(updatedPasswords, OpType.MODIFY);
+  }
+  return isUpdated;
 }

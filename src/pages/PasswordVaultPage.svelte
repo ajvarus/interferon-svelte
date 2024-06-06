@@ -2,11 +2,15 @@
   import PasswordVaultTabs from "../components/PasswordVaultTabs.svelte";
   import { onMount, onDestroy } from "svelte";
   import { getPasswords as updatePasswordStore } from "../stores/queries/passwordStoreQueries";
-  import { storePasswords } from "../stores/mutations/passwordStoreMutations";
+  import {
+    storePasswords,
+    updatePasswords,
+  } from "../stores/mutations/passwordStoreMutations";
   import { passwordStore as passwordsStore } from "../stores/PasswordStore";
 
   let passwords = [];
   let isSaved;
+  let isUpdated;
   let result;
 
   let unsubscribe;
@@ -31,13 +35,14 @@
     if (unsubscribe) unsubscribe();
   });
 
-  async function onEdit() {
-    return;
-    // await update_password(updatedPassword);
-    // Optionally re-fetch or update local state
+  async function onEdit(password) {
+    const updatedPasswords = [password];
+    isUpdated = await updatePasswords(updatedPasswords);
+    const response = { success: isUpdated };
+    return response;
   }
 
-  async function onDelete() {
+  async function onDelete(password) {
     return;
     // await delete_password(passwordId);
     // Optionally re-fetch or filter out the deleted password locally

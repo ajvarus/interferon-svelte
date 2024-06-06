@@ -18,11 +18,19 @@
   };
 
   let state = State.NEUTRAL;
+  let originalPassword = { ...password }; // Preserve original password;
   let passwordName = password.passwordName;
-  let passwordUsername = password.passwordName;
+  let passwordUsername = "";
   let passwordValue = password.decryptedPassword;
-  let actionType = null;
   let error = null;
+
+  // TODO: Change code to preserve original password state if op cancelled
+  $: {
+    if (state === State.EDITING) {
+      password.passwordName = passwordName;
+      password.decryptedPassword = passwordValue;
+    }
+  }
 
   const startEdit = () => {
     state = State.EDITING;
@@ -34,15 +42,17 @@
 
   const cancelMutation = () => {
     state = State.NEUTRAL;
+    password = { ...originalPassword }; // Restore originalPassword;
+    passwordName = password.passwordName;
+    passwordValue = password.decryptedPassword;
     error = null;
   };
 
   const resetToNeutralState = () => {
     setTimeout(() => {
       state = State.NEUTRAL;
-      actionType = null;
       error = null;
-    }, 1500);
+    }, 5000);
   };
 
   const confirmMutation = async () => {
@@ -50,13 +60,13 @@
     let response = null;
     try {
       if (state === State.EDITING) {
-        state = State.LOADING;
-        response = await onEdit(password.id, passwordValue);
+        state = State.MUTATING;
+        response = await onEdit(password);
       } else if (state === State.DELETING) {
-        state = State.LOADING;
-        response = await onDelete(password.id);
+        state = State.MUTATING;
+        response = await onDelete(password);
       }
-      if (not(response)) {
+      if (!response) {
         error = "Action failed";
       }
       state = State.POST_MUTATION;
@@ -70,17 +80,6 @@
 </script>
 
 <div class="block">
-  <!-- <div class="field">
-    <div class="control is-medium is-rounded">
-      <input
-        class="input is-medium is-borderless is-shadowless"
-        type="text"
-        placeholder="Password name|"
-        bind:value={passwordName}
-        readonly={state !== State.EDITING}
-      />
-    </div>
-  </div> -->
   <div class="level">
     <div class="level-item">
       <div class="field is-grouped is-grouped-multiline">
@@ -140,12 +139,14 @@
                     </button>
                   </div>
                 {/if}
-                {#if state === State.EDITING || state === State.DELETING}
+                <!-- {#if state === State.EDITING || state === State.DELETING || state === State.MUTATING} -->
+                {#if state !== State.NEUTRAL}
                   <div class="control">
                     <button
                       class="button is-borderless is-rounded"
                       on:click={cancelMutation}
                       in:fade
+                      disabled={state === State.MUTATING}
                     >
                       <span class="icon is-small has-text-danger">
                         <FontAwesomeIcon icon="xmark" />
@@ -157,18 +158,10 @@
                       class="button is-borderless is-rounded"
                       on:click={confirmMutation}
                       in:fade={{ delay: 150 }}
+                      disabled={state === State.MUTATING}
                     >
                       <span class="icon is-small has-text-success">
                         <FontAwesomeIcon icon="check" />
-                      </span>
-                    </button>
-                  </div>
-                {/if}
-                {#if state === State.MUTATING}
-                  <div class="control">
-                    <button class="button">
-                      <span class="icon is-small">
-                        <FontAwesomeIcon icon="spinner" spin />
                       </span>
                     </button>
                   </div>
@@ -179,14 +172,21 @@
         </div>
       </div>
     </div>
+    {#if state === State.MUTATING}
+      <div class="level-item" in:slide>
+        <span class="icon has-text-grey">
+          <FontAwesomeIcon icon="spinner" spin />
+        </span>
+      </div>
+    {/if}
     {#if state === State.POST_MUTATION}
-      <div class="level-item" in:slide out:slide>
+      <div class="level-item" in:fade={{ delay: 100 }} out:fade>
         {#if error}
-          <span class="icon has-text-danger">
+          <span class="icon has-background-danger box-rounded">
             <FontAwesomeIcon icon="xmark" />
           </span>
         {:else}
-          <span class="icon has-text-success">
+          <span class="icon has-background-success box-rounded">
             <FontAwesomeIcon icon="check" />
           </span>
         {/if}

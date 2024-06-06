@@ -1,8 +1,16 @@
 // /src/tools/passwordTransformer.js
 
-export default function transformPasswordsForStorage(passwords) {
+export function transformPasswordsForStorage(passwords) {
   return passwords.map((password) => ({
     passwordName: password.password_name,
     password: password.password,
+  }));
+}
+
+export function transformPasswordsForUpdate(passwords) {
+  return passwords.map((password) => ({
+    id: password.id,
+    passwordName: password.passwordName,
+    password: password.decryptedPassword,
   }));
 }
