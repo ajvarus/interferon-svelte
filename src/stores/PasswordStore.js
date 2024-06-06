@@ -12,7 +12,7 @@ export const OpType = {
 // Function to update the passwords in the store
 export const updatePasswordsInStore = (passwords, opType) => {
   let isUpdated = false;
-  if (!isStorable(passwords)) {
+  if (opType !== OpType.DELETE && !isStorable(passwords)) {
     throw new Error("Invalid password structure");
   }
   switch (opType) {
@@ -23,7 +23,7 @@ export const updatePasswordsInStore = (passwords, opType) => {
       isUpdated = modifyPasswordsInStore(passwords);
       break;
     case OpType.DELETE:
-      // TODO
+      isUpdated = deletePasswordsFromStore(passwords);
       break;
     default:
       throw new Error("Invalid operation type");
@@ -46,6 +46,16 @@ function modifyPasswordsInStore(modifiedPasswords) {
     );
     return modifiedPassword ? { ...password, ...modifiedPassword } : password;
   });
+  passwordStore.set(updatedPasswords);
+  return true;
+}
+
+function deletePasswordsFromStore(deletedPasswords) {
+  const idsToDelete = deletedPasswords.map((password) => password.id);
+  const existingPasswords = get(passwordStore);
+  const updatedPasswords = existingPasswords.filter(
+    (password) => !idsToDelete.includes(password.id)
+  );
   passwordStore.set(updatedPasswords);
   return true;
 }

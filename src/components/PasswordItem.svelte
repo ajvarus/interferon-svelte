@@ -24,7 +24,6 @@
   let passwordValue = password.decryptedPassword;
   let error = null;
 
-  // TODO: Change code to preserve original password state if op cancelled
   $: {
     if (state === State.EDITING) {
       password.passwordName = passwordName;

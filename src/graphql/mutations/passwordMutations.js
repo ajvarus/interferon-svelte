@@ -48,3 +48,25 @@ export async function updatePasswordsInBackend(modifiedPasswords) {
     console.log(error);
   }
 }
+
+const DELETE_PASSWORDS_MUTATION = gql`
+  mutation DeletePasswords($passwords: [PasswordDeleteInput!]!) {
+    deletePasswords(passwords: $passwords) {
+      id
+      passwordName
+    }
+  }
+`;
+
+export async function deletePasswordsInBackend(deletedPasswords) {
+  try {
+    const client = await getGraphQLClient();
+    const response = await client.request(DELETE_PASSWORDS_MUTATION, {
+      passwords: deletedPasswords,
+    });
+    const result = response.deletePasswords;
+    return result;
+  } catch (error) {
+    console.log(error);
+  }
+}

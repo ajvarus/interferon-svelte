@@ -14,3 +14,10 @@ export function transformPasswordsForUpdate(passwords) {
     password: password.decryptedPassword,
   }));
 }
+
+export function transformPasswordsForDeletion(passwords) {
+  return passwords.map((password) => ({
+    id: password.id,
+    passwordName: password.passwordName,
+  }));
+}

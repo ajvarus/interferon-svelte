@@ -3,12 +3,14 @@
 import {
   storePasswordsInBackend,
   updatePasswordsInBackend,
+  deletePasswordsInBackend,
 } from "../../graphql/mutations/passwordMutations";
 import { updatePasswordsInStore, OpType } from "../PasswordStore";
 
 import {
   transformPasswordsForStorage,
   transformPasswordsForUpdate,
+  transformPasswordsForDeletion,
 } from "../../tools/passwordTransformer";
 
 export async function storePasswords(newPasswords) {
@@ -31,4 +33,14 @@ export async function updatePasswords(passwords) {
     isUpdated = updatePasswordsInStore(updatedPasswords, OpType.MODIFY);
   }
   return isUpdated;
+}
+
+export async function deletePasswords(passwords) {
+  let isDeleted = false;
+  if (passwords) {
+    let transformedPasswords = transformPasswordsForDeletion(passwords);
+    let deletedPasswords = await deletePasswordsInBackend(transformedPasswords);
+    isDeleted = updatePasswordsInStore(deletedPasswords, OpType.DELETE);
+  }
+  return isDeleted;
 }

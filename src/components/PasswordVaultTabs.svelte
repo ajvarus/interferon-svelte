@@ -13,6 +13,8 @@
   export let onDelete;
   export let addPasswords;
 
+  let addedPasswords;
+
   const tabs = [
     { name: "passwords", displayName: "Vault", icon: "lock" },
     {
@@ -50,7 +52,11 @@
     {/if}
     {#if activeTab === "add-passwords"}
       <div out:slide={{ easing: cubicIn, duration: 1000, x: 1000 }}>
-        <AddPasswordsTab on:save={addPasswords} {result} />
+        <AddPasswordsTab
+          on:save={addPasswords}
+          {result}
+          bind:passwords={addedPasswords}
+        />
       </div>
     {/if}
   </div>

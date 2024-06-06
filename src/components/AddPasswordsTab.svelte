@@ -25,7 +25,7 @@
 
   let selfState = SelfState.NEUTRAL;
 
-  let passwords = [];
+  export let passwords = [];
   let plen = 0;
   $: plen = passwords.length;
   $: hasDeletedPasswords = passwords.some(

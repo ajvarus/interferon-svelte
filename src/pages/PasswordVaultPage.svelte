@@ -5,12 +5,14 @@
   import {
     storePasswords,
     updatePasswords,
+    deletePasswords,
   } from "../stores/mutations/passwordStoreMutations";
   import { passwordStore as passwordsStore } from "../stores/PasswordStore";
 
   let passwords = [];
   let isSaved;
   let isUpdated;
+  let isDeleted;
   let result;
 
   let unsubscribe;
@@ -43,9 +45,10 @@
   }
 
   async function onDelete(password) {
-    return;
-    // await delete_password(passwordId);
-    // Optionally re-fetch or filter out the deleted password locally
+    const deletedPasswords = [password];
+    isDeleted = await deletePasswords(deletedPasswords);
+    const response = { success: isDeleted };
+    return response;
   }
 
   async function addPasswords(event) {
