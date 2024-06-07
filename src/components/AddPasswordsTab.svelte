@@ -65,7 +65,7 @@
 
   export let result;
 
-  $: if (result !== undefined) {
+  $: if (result !== undefined && selfState === SelfState.SAVING) {
     console.log("Inside AddPasswordsTab", result.success);
     if (result.success) {
       selfState = SelfState.SUCCESS;

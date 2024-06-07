@@ -145,7 +145,8 @@
                       class="button is-borderless is-rounded"
                       on:click={cancelMutation}
                       in:fade
-                      disabled={state === State.MUTATING}
+                      disabled={state === State.MUTATING ||
+                        state === State.POST_MUTATION}
                     >
                       <span class="icon is-small has-text-danger">
                         <FontAwesomeIcon icon="xmark" />
@@ -157,7 +158,8 @@
                       class="button is-borderless is-rounded"
                       on:click={confirmMutation}
                       in:fade={{ delay: 150 }}
-                      disabled={state === State.MUTATING}
+                      disabled={state === State.MUTATING ||
+                        state === State.POST_MUTATION}
                     >
                       <span class="icon is-small has-text-success">
                         <FontAwesomeIcon icon="check" />
