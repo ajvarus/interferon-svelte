@@ -73,3 +73,7 @@ function isStorable(passwords) {
   }
   return isValid;
 }
+
+export function clearPasswordStore() {
+  passwordStore.set([]);
+}

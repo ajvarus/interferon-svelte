@@ -31,7 +31,7 @@
           isAuthenticated: true,
           username: payload.username,
         });
-        setTimeout(() => push("/vault"), 1500);
+        setTimeout(() => push("/dashboard"), 1500);
       }
     } catch (error) {
       console.error("Error during signup:", error);

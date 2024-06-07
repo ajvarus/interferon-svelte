@@ -2,15 +2,21 @@
 
 <script>
   import { FontAwesomeIcon } from "@fortawesome/svelte-fontawesome";
-  import { slide, fly } from "svelte/transition";
+  import { fly } from "svelte/transition";
+
+  import { userStore } from "../stores/userStore";
 
   let showLabel = false;
+  let isLoggingOut = false;
 
   export let currentPage = "vault";
+  export let manageLogout;
 
   function navigateTo(page) {
     currentPage = page;
   }
+
+  $: isLoggingOut = $userStore.isLoggingOut;
 </script>
 
 <div
@@ -30,9 +36,10 @@
           >
             <div class="level-item">
               <a
+                href="/"
                 class="button is-rounded"
                 class:is-active={currentPage === "vault"}
-                on:click={() => navigateTo("vault")}
+                on:click|preventDefault={() => navigateTo("vault")}
               >
                 <span class="icon is-large has-text-grey">
                   <FontAwesomeIcon icon="lock" />
@@ -62,10 +69,21 @@
             on:mouseleave={() => (showLabel = false)}
           >
             <div class="level-item">
-              <a class="button is-rounded">
-                <span class="icon is-large has-text-grey">
-                  <FontAwesomeIcon icon="power-off" />
-                </span>
+              <a
+                href="/"
+                class="button is-rounded"
+                class:is-loading={isLoggingOut}
+                on:click|preventDefault={manageLogout}
+              >
+                {#if isLoggingOut}
+                  <span class="icon is-large has-text-grey">
+                    <FontAwesomeIcon icon="spinner" spin />
+                  </span>
+                {:else}
+                  <span class="icon is-large has-text-grey">
+                    <FontAwesomeIcon icon="power-off" />
+                  </span>
+                {/if}
               </a>
             </div>
             <div class="level-item">
