@@ -1,6 +1,7 @@
 <!-- src/components/AddPasswordsTab.svelte -->
 <script>
   import AddPasswordItem from "./AddPasswordItem.svelte";
+  import FileUploader from "./FileUploader.svelte";
   import { createEventDispatcher } from "svelte";
   import { fade, scale } from "svelte/transition";
 
@@ -8,6 +9,8 @@
   import MessageBox from "./MessageBox.svelte";
 
   import { FontAwesomeIcon } from "../fontAwesome";
+
+  import { v4 as uuidv4 } from "uuid";
 
   const dispatch = createEventDispatcher();
 
@@ -40,6 +43,17 @@
       ...passwords,
       { id: Date.now(), password_name: "", password: "", state: State.ADDED },
     ];
+  };
+
+  const addPasswordsFromFile = (event) => {
+    let parsedPasswords = event.detail.passwords;
+    let transformedPasswords = parsedPasswords.map((p) => ({
+      ...p,
+      id: uuidv4(),
+      state: State.ADDED,
+    }));
+    passwords = [...passwords, ...transformedPasswords];
+    console.log(passwords);
   };
 
   const deletePassword = (id) => {
@@ -100,6 +114,7 @@
                 ><FontAwesomeIcon icon="check" /></button
               >
             {/if}
+            <FileUploader on:fileParsed={addPasswordsFromFile} />
           </p>
           {#if selfState === SelfState.SAVING}
             <PasswordsLoading />

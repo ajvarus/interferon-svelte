@@ -8,6 +8,7 @@ import {
   faPlus,
   faLock,
   faPowerOff,
+  faUpload,
 } from "@fortawesome/free-solid-svg-icons";
 
 library.add(
@@ -18,7 +19,8 @@ library.add(
   faSpinner,
   faPlus,
   faLock,
-  faPowerOff
+  faPowerOff,
+  faUpload
 );
 
 export { FontAwesomeIcon } from "@fortawesome/svelte-fontawesome";

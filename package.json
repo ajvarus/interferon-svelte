@@ -30,6 +30,7 @@
     "graphql-request": "^7.0.1",
     "sirv-cli": "^2.0.0",
     "svelte-spa-router": "^4.0.1",
-    "urql": "^4.1.0"
+    "urql": "^4.1.0",
+    "uuid": "^9.0.1"
   }
 }
