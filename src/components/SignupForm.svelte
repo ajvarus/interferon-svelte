@@ -58,7 +58,11 @@
 </script>
 
 <div class="box">
-  <h1 class="title">Signup</h1>
+  <h1 class="title">Signin</h1>
+  <h2 class="subtitle is-6 has-text-centered">
+    We'll sign you up if you're new or sign you in if you aren't. Yes, the
+    seamlessness starts here.
+  </h2>
   <form on:submit|preventDefault={handleSubmit}>
     <!-- Use the InputField component for each input field -->
     <InputField type="text" placeholder="Username" bind:value={username} />
