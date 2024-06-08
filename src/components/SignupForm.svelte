@@ -37,7 +37,7 @@
     }
 
     // Changed to signin to test signin
-    const payload = { auth_type: "signin", username, email, password };
+    const payload = { auth_type: "resolve", username, email, password };
     isLoading = true;
     dispatch("submit", { payload });
   };
