@@ -86,7 +86,7 @@
       {:else if authFailed}
         <span class="icon"><FontAwesomeIcon icon="xmark" /></span>
       {:else}
-        <span in:fade>Signup</span>
+        <span class="icon" in:fade><FontAwesomeIcon icon="arrow-right" /></span>
       {/if}
     </button>
   </form>
