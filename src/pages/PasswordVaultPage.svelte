@@ -7,9 +7,12 @@
     updatePasswords,
     deletePasswords,
   } from "../stores/mutations/passwordStoreMutations";
+
   import { passwordStore as passwordsStore } from "../stores/PasswordStore";
+  import { passwordsState } from "../stores/PasswordStore";
 
   let passwords = [];
+  let isLoading = true;
   let isSaved;
   let isUpdated;
   let isDeleted;
@@ -19,6 +22,7 @@
 
   onMount(async () => {
     try {
+      passwordsState.set({ isLoading });
       const isPasswordStoreSet = await updatePasswordStore();
       console.log(isPasswordStoreSet);
       if (isPasswordStoreSet) {
@@ -30,6 +34,9 @@
       }
     } catch (error) {
       console.error(error);
+    } finally {
+      isLoading = false;
+      passwordsState.set({ isLoading });
     }
   });
 

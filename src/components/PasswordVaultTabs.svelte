@@ -2,7 +2,8 @@
   import PasswordsTab from "./PasswordsTab.svelte";
   import AddPasswordsTab from "./AddPasswordsTab.svelte";
 
-  import { slide } from "svelte/transition";
+  import { userStore } from "../stores/userStore";
+  import { fade } from "svelte/transition";
   import { cubicIn } from "svelte/easing";
 
   import { FontAwesomeIcon } from "@fortawesome/svelte-fontawesome";
@@ -26,6 +27,11 @@
 
   let activeTab = tabs[0].name;
 
+  // Using auto-subscription for userStore
+  //$: user = $userStore;
+  //$: passwordsExist = passwords && passwords.length > 0;
+  //$: activeTab = !passwordsExist ? "add-passwords" : "passwords";
+
   const switchTab = (tab) => {
     activeTab = tab.name;
   };
@@ -36,7 +42,7 @@
     <ul>
       {#each tabs as tab}
         <li class:is-active={activeTab === tab.name}>
-          <a on:click={() => switchTab(tab)}>
+          <a href on:click|preventDefault={() => switchTab(tab)}>
             <span class="icon">
               <FontAwesomeIcon icon={tab.icon} />
             </span> <span>{tab.displayName}</span></a
@@ -51,7 +57,7 @@
       <PasswordsTab {passwords} {onEdit} {onDelete} />
     {/if}
     {#if activeTab === "add-passwords"}
-      <div out:slide={{ easing: cubicIn, duration: 1000, x: 1000 }}>
+      <div>
         <AddPasswordsTab
           on:save={addPasswords}
           {result}

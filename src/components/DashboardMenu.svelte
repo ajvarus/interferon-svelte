@@ -50,7 +50,7 @@
               {#if showLabel}
                 <span
                   transition:fly={{ x: -50, duration: 200 }}
-                  class="is-static">Vault</span
+                  class="is-static has-text-weight-medium">Vault</span
                 >
               {/if}
             </div>
@@ -90,7 +90,7 @@
               {#if showLabel}
                 <span
                   transition:fly={{ x: -50, duration: 200 }}
-                  class="is-static">Logout</span
+                  class="is-static has-text-weight-medium">Logout</span
                 >
               {/if}
             </div>

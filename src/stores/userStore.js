@@ -11,6 +11,7 @@ export const userStore = writable({
 export function clearUserStore() {
   userStore.set({
     isAuthenticated: false,
+    isNew: true,
     username: "",
     isLoggingOut: false,
   });

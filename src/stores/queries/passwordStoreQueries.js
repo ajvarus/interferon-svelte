@@ -7,7 +7,7 @@ import { get } from "svelte/store";
 export async function getPasswords() {
   let isPasswordStoreSet = false;
   let passwords = [];
-  passwords = get(passwordStore);
+  passwords = get(passwordStore) || [];
 
   if (passwords.length === 0) {
     passwords = await getPasswordsFromBackend();

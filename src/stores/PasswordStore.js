@@ -2,6 +2,7 @@ import { writable, get } from "svelte/store";
 
 // Create a writable store to hold passwords
 export const passwordStore = writable([]);
+export const passwordsState = writable({});
 
 export const OpType = {
   ADD: "add",
@@ -32,7 +33,7 @@ export const updatePasswordsInStore = (passwords, opType) => {
 };
 
 function addPasswordsToStore(newPasswords) {
-  const existingPasswords = get(passwordStore);
+  const existingPasswords = get(passwordStore) || [];
   const updatedPasswords = [...existingPasswords, ...newPasswords];
   passwordStore.set(updatedPasswords);
   return true;

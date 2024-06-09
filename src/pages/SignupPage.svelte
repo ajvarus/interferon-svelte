@@ -30,6 +30,7 @@
         userStore.set({
           isAuthenticated: true,
           username: payload.username,
+          isNew: session.intf_user.is_new,
         });
         setTimeout(() => push("/dashboard"), 1500);
       }
